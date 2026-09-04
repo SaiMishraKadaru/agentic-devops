@@ -1,0 +1,9 @@
+{
+  "pipeline": "payment-api-deployment",
+  "status": "failed",
+  "environment": "dev",
+  "stage": "deploy",
+  "commit": "abc123",
+  "error": "Deployment rollout exceeded the expected time",
+  "service": "payment-api"
+}
