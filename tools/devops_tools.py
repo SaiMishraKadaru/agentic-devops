@@ -1,25 +1,52 @@
-def get_deployment_status():
-    """Return the current status of the payment-api deployment."""
+import json
+import subprocess
+
+
+def container_status(container_name="postgres"):
+    """Return the current status of a Docker container."""
+    result = subprocess.run(
+        [
+            "docker",
+            "inspect",
+            "--format",
+            "{{json .State}}",
+            container_name,
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    state = json.loads(result.stdout)
 
     return {
-        "deployment": "payment-api",
-        "status": "failed",
-        "pod": "payment-api-7d8f9c",
-        "reason": "CrashLoopBackOff"
+    "container": container_name,
+    "status": state["Status"],
+    "running": state["Running"],
+    "health": state.get("Health", {}).get("Status"),
+    "exit_code": state["ExitCode"],
+    "error": state["Error"],
+    "started_at": state["StartedAt"],
+    "finished_at": state["FinishedAt"],
+}
 
-        }
 
-def get_deployment_logs():
-    """Return simulated logs from the payment-api deployment."""
+def container_logs(container_name="postgres", tail=20):
+    """Return recent logs from a Docker container."""
+    result = subprocess.run(
+        [
+            "docker",
+            "logs",
+            "--tail",
+            str(tail),
+            container_name,
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
     return {
-        "deployment": "payment-api",
-        "pod": "payment-api-7d8f9c",
-        "logs": [
-            "Starting payment-api...",
-            "Loading configuration...",
-            "Connecting to database...",
-            "ERROR: connection refused to database at db.internal:5432",
-            "Application terminated."
-        ]
+        "container": container_name,
+        "logs": result.stdout.splitlines(),
     }

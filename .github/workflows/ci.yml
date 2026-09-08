@@ -1,0 +1,32 @@
+name: Agentic DevOps CI
+
+on:
+  push:
+    branches:
+      - main
+      - feat/agentic-cicd
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python syntax check
+        run: python -m compileall .
+        
+      - name: Simulate deployment failure
+        run: |
+          echo "Deployment rollout exceeded the expected time"
+          exit 1
