@@ -25,8 +25,12 @@ jobs:
 
       - name: Run Python syntax check
         run: python -m compileall .
-        
-      - name: Simulate deployment failure
-        run: |
-          echo "Deployment rollout exceeded the expected time"
-          exit 1
+
+      - name: Remove any existing container
+        run: docker rm -f agentic-devops-demo || true
+
+      - name: Build image
+        run: docker build -t agentic-devops-demo .
+
+      - name: Run container (fails without DB_HOST)
+        run: docker run --name agentic-devops-demo agentic-devops-demo
