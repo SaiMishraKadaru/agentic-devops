@@ -1,9 +1,8 @@
 import asyncio
 import sys
+from pathlib import Path
 
 from mcp import Client, StdioServerParameters
-
-from pathlib import Path
 
 
 server_params = StdioServerParameters(
@@ -25,12 +24,16 @@ async def main():
             print(f"- {tool.name}")
             print(f"  Description: {tool.description}")
 
-        print("\nCalling deployment_status...")
+        print("\nget_container_status...")
 
-        tool_result = await client.call_tool(
-            "deployment_status",
-            {},
-        )
+        tool_result = await client.call_tool("get_container_status", {})
+
+        print("\nTool result:")
+        print(tool_result)
+
+        print("\nget_container_logs...")
+
+        tool_result = await client.call_tool("get_container_logs", {})
 
         print("\nTool result:")
         print(tool_result)
