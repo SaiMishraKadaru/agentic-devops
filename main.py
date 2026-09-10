@@ -78,10 +78,13 @@ async def main():
                 pipeline_event = json.load(file)
 
             task = (
-                "A CI/CD pipeline has failed. "
-                "Investigate the failure using the available tools. "
-                "Determine the likely root cause and recommend recovery steps.\n\n"
-                f"CI/CD Event:\n{json.dumps(pipeline_event, indent=2)}"
+                "A CI/CD alert reported this failure, but alerts can be stale — "
+                "verify it against the container's current live status before "
+                "concluding anything.\n\n"
+                f"Alert:\n{json.dumps(pipeline_event, indent=2)}\n\n"
+                "If live status still shows the failure, find the root cause and "
+                "recommend recovery steps. If it's actually healthy now, say so — "
+                "don't recommend fixes for a problem that's already resolved."
             )
 
         interaction = client.interactions.create(
