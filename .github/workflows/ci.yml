@@ -39,9 +39,17 @@ jobs:
         run: docker build -t agentic-devops-demo .
 
       - name: Run container (fails without DB_HOST)
+        id: run_container
         run: |
           if [ -n "${{ github.event.inputs.db_host }}" ]; then
             docker run --name agentic-devops-demo -e DB_HOST="${{ github.event.inputs.db_host }}" agentic-devops-demo
           else
             docker run --name agentic-devops-demo agentic-devops-demo
           fi
+      
+      - name: Run agent investigation
+        if: steps.run_container.outcome == 'failure'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AGENT_TASK: "Investigate failure in container agentic-devops-demo on commit ${{ github.sha }}, workflow run ${{ github.run_id }}"
+        run: python main.py
