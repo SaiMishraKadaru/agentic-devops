@@ -1,9 +1,8 @@
 {
-  "pipeline": "payment-api-deployment",
+  "pipeline": "agentic-devops-demo-ci",
   "status": "failed",
-  "environment": "dev",
-  "stage": "deploy",
-  "commit": "abc123",
-  "error": "Deployment rollout exceeded the expected time",
-  "service": "payment-api"
+  "environment": "local",
+  "stage": "container-start",
+  "error": "Container exited with code 1: DB_HOST environment variable is not set",
+  "service": "agentic-devops-demo"
 }
