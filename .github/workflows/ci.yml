@@ -48,7 +48,7 @@ jobs:
           fi
       
       - name: Run agent investigation
-        if: steps.run_container.outcome == 'failure'
+        if: failure() && steps.run_container.outcome == 'failure'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           AGENT_TASK: "Investigate failure in container agentic-devops-demo on commit ${{ github.sha }}, workflow run ${{ github.run_id }}"
