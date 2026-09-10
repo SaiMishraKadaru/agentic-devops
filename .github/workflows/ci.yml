@@ -6,6 +6,12 @@ on:
       - main
       - feat/agentic-cicd
   pull_request:
+  workflow_dispatch:
+    inputs:
+      db_host:
+        description: 'DB_HOST value (leave empty to simulate failure)'
+        required: false
+        default: ''
 
 jobs:
   test:
@@ -33,4 +39,9 @@ jobs:
         run: docker build -t agentic-devops-demo .
 
       - name: Run container (fails without DB_HOST)
-        run: docker run --name agentic-devops-demo agentic-devops-demo
+        run: |
+          if [ -n "${{ github.event.inputs.db_host }}" ]; then
+            docker run --name agentic-devops-demo -e DB_HOST="${{ github.event.inputs.db_host }}" agentic-devops-demo
+          else
+            docker run --name agentic-devops-demo agentic-devops-demo
+          fi
