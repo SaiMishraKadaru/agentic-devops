@@ -88,7 +88,7 @@ async def main():
             )
 
         interaction = client.interactions.create(
-            model="gemini-3.6-flash",
+            model="gemini-3.7-flash",
             input=task,
             tools=gemini_tools,
         )
