@@ -137,7 +137,7 @@ async def main():
 
             # Send MCP results back to Gemini
             interaction = client.interactions.create(
-                model="gemini-3.6-flash",
+                model="gemini-3.7-flash",
                 previous_interaction_id=interaction.id,
                 input=function_results,
                 tools=gemini_tools,
